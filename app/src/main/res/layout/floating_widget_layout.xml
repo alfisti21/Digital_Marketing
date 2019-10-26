@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <!--   Root container of Floating Widget View  -->
+    <RelativeLayout
+        android:id="@+id/root_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <!--  View while view is collapsed  -->
+
+        <RelativeLayout
+            android:id="@+id/collapse_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <!--   ImageView of floating widget  -->
+            <ImageView
+                android:id="@+id/collapsed_iv"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/bubble1"
+                tools:ignore="ContentDescription" />
+            <TextView
+                android:id="@+id/myImageViewText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/collapsed_iv"
+                android:layout_alignTop="@id/collapsed_iv"
+                android:layout_alignRight="@id/collapsed_iv"
+                android:layout_alignBottom="@id/collapsed_iv"
+                android:layout_margin="1dp"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:fontFamily="@font/vodafont"
+                android:textColor="#000000" />
+
+            <!--   Close button to close Floating Widget View  -->
+
+        </RelativeLayout>
+
+        <!--   View while view is expanded   -->
+        <LinearLayout
+            android:id="@+id/expanded_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:background="@drawable/layout_bg"
+            android:padding="8dp"
+            android:visibility="gone">
+
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/floating_widget_title_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/vodafont"
+                    android:textColor="#000000"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/floating_widget_detail_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="@string/floating_widget_details"
+                    android:fontFamily="@font/vodafont2"
+                    android:textColor="#000000"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/txtSpecs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:selectAllOnFocus="false"
+                    android:linksClickable="true"
+                    android:autoLink="all"
+                    android:text="\nΔείτε τα χαρακτηριστικά"
+                    android:textSize="17sp"
+                    android:fontFamily="@font/vodafont2"
+                    android:textColor="#0000ff" />
+            </LinearLayout>
+
+            <!--  ImageView to Close Expanded View  -->
+            <ImageView
+                android:id="@+id/close_expanded_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/ic_close_black_24dp" />
+
+
+        </LinearLayout>
+    </RelativeLayout>
+</FrameLayout>

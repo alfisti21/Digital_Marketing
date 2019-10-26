@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">MediaSpecs</string>
+    <string name="channel_name">Name</string>
+    <string name="channel_description">Description</string>
+    <string name="confirm">Confirm</string>
+    <string name="create_floating_widget">Create Floating Widget</string>
+    <string name="floating_widget_label">259.00€ / Άτοκες Δόσεις: 24x10.79€</string>
+    <string name="floating_widget_details">Η τιμή περιλαμβάνει ΦΠΑ</string>
+    <string name="draw_other_app_permission_denied">Draw over other app permission not available. App will not work without permission. Please try again.</string>
+    <string name="pin">Πληκτρολογίστε PIN</string>
+    <string name="nsap">Παρακαλώ συμπληρώστε\nτα στοιχεία</string>
+    <string name="logoVodafone">logoVodafone</string>
+    <string name="hintUsername">username</string>
+    <string name="hintPassword">Password</string>
+    <string name="hint_sap_code">SAP Code</string>
+    <string name="availableIn">Διαθέσιμο Σε:</string>
+    <string name="tab">\u0009\u0009\u0009</string>
+    <string name="ok">OK</string>
+    <string name="pinHint">PIN</string>
+    <string name="appVersion">v1.4.4</string>
+</resources>
