@@ -25,10 +25,10 @@ before_script:
   - yes | android-sdk-linux/tools/bin/sdkmanager --licenses
   - set -o pipefail
 
-lintDebug:
-  stage: build
-  script:
-    - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
+# lintDebug:
+#   stage: build
+#   script:
+#     - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
 
 assembleDebug:
   stage: build
