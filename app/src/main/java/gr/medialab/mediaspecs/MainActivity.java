@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                 startService(service);
                 Intent service2 = new Intent(getApplicationContext(), VideoCheck2.class);
                 startService(service2);
-                finishAndRemoveTask();
+                moveTaskToBack(true);
             }
         }catch (Exception e){
             e.printStackTrace();

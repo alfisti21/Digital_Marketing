@@ -195,7 +195,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
                         //Log.d("DEBUG_TAG","Action was CANCEL");
                     case (MotionEvent.ACTION_OUTSIDE) :
                         startService(mServiceIntent);
-                        finishAndRemoveTask();
+                        moveTaskToBack(true);
                         //Log.d("DEBUG_TAG","Action was DOWN");
                         return true;
                     //Log.d("DEBUG_TAG","Movement occurred outside bounds " + "of current screen element");
@@ -547,7 +547,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
                 FloatingWidgetService mSensorService = new FloatingWidgetService();
                 final Intent mServiceIntent = new Intent(getCtx(), mSensorService.getClass());
                 startService(mServiceIntent);
-                finishAndRemoveTask();
+                moveTaskToBack(true);
                 // do something
             }
         }
