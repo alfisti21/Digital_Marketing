@@ -11,6 +11,7 @@
 
 package gr.medialab.mediaspecs;
 
+import android.app.ActionBar;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.os.Environment;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -120,6 +122,7 @@ public class VideoDownload3 extends AppCompatActivity {
         downloadID = downloadManager.enqueue(request);// enqueue puts the download request in the queue.
 
         final ProgressBar mProgressBar2 = findViewById(R.id.progressBar2);
+        mProgressBar2.setScaleY(5f);
 
         new Thread(new Runnable() {
 

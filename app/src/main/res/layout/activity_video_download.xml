@@ -106,9 +106,9 @@
         android:fontFamily="@font/vodafont"
         android:textSize="25sp"
         android:text="Γίνεται λήψη..."
-        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintBottom_toTopOf="@+id/guideline16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline17"  />
+        app:layout_constraintTop_toTopOf="@+id/guideline15"  />
 
 </android.support.constraint.ConstraintLayout>

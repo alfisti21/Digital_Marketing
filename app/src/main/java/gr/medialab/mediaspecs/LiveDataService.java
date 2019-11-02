@@ -114,7 +114,7 @@ public class LiveDataService extends Service {
                                         if(!sharedVersion.equals(version)){
                                             //Log.e("onResponse", response.toString());
                                             //Log.e("Mnimi", Environment.getExternalStorageDirectory().toString());
-                                            mCreateAndSaveFile("response.json", response.toString());
+                                            mCreateAndSaveFile(".response.json", response.toString());
                                             SharedPreferences.Editor editor = myPrefs.edit();
                                             editor.putString("VERSION", version);
                                             editor.apply();

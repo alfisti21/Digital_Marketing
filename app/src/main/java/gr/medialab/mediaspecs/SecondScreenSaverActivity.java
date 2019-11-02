@@ -108,7 +108,7 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
 
         if(iterationInt>20){
             startService(mServiceIntent2);
-            moveTaskToBack(true);
+            finishAndRemoveTask();
             SharedPreferences.Editor editor = myPrefs.edit();
             editor.putString("SCREENSAVER", "1");
             editor.apply();
@@ -142,7 +142,7 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         WindowManager.LayoutParams params = getWindow().getAttributes();
         if(checkTime("21:15:00", "08:45:00", currentTime)){
-            moveTaskToBack(true);
+            finishAndRemoveTask();
             //Log.e("EINAI METAKSI?","EINAI");
             params.screenBrightness = 0.1f;
         }else{
