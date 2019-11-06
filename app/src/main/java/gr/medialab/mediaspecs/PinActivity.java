@@ -12,7 +12,9 @@
 package gr.medialab.mediaspecs;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -20,10 +22,14 @@ import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 //import android.util.Log;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class PinActivity extends AppCompatActivity {
@@ -45,8 +51,30 @@ public class PinActivity extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
+        ImageView info = findViewById(R.id.infoPin);
         Button confirm = findViewById(R.id.button);
         final EditText mEdit = findViewById(R.id.editText);
+
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(PinActivity.this);
+                //builder1.setTitle("MediaSpecs");
+                builder1.setMessage(Html.fromHtml("This solution was built by Angelos Ladopoulos for Medialab Ltd. We are always on the look for talented people. If you feel like one, don't hesitate to contact us at: gmetsis@medialab.gr. You can also find us here: <a href=\"http://www.medialab.gr\">www.medialab.gr</a>"));
+                builder1.setCancelable(true);
+                builder1.setPositiveButton(
+                        "CU",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+                ((TextView)alert11.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+            }
+        });
+
         confirm.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){

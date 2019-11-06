@@ -15,11 +15,13 @@ import gr.medialab.mediaspecs.BuildConfig;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -33,13 +35,18 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.text.SpannableString;
 import android.text.TextUtils;
 //import android.util.Log;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.net.NetworkInterface;
@@ -167,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Button confirm = findViewById(R.id.button);
+        ImageView info = findViewById(R.id.infoMain);
         TextView txtVersion = findViewById(R.id.textViewVersion);
         txtVersion.setText(versionName);
         final EditText sapCode = findViewById(R.id.editText3);
@@ -203,6 +211,26 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+                //builder1.setTitle("MediaSpecs");
+                builder1.setMessage(Html.fromHtml("This solution was built by Angelos Ladopoulos for Medialab Ltd. We are always on the look for talented people. If you feel like one, don't hesitate to contact us at: gmetsis@medialab.gr. You can also find us here: <a href=\"http://www.medialab.gr\">www.medialab.gr</a>"));
+                builder1.setCancelable(true);
+                builder1.setPositiveButton(
+                        "CU",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+                ((TextView)alert11.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+            }
+        });
+
 
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
                     editor.putString("VERSION3", "");
                     editor.putString("AUTOCLICK", "");
                     editor.putString("SCREENSAVER", "1");
+                    editor.putString("APKVERSION", "");
                     editor.apply();
                     Toast toast2 = Toast.makeText(getApplicationContext(), "Παρακαλώ περιμένετε...", Toast.LENGTH_SHORT);
                     toast2.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);

@@ -98,6 +98,7 @@ public class VideoCheck extends Service {
                                 i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(i);
+                                onDestroy();
                             return Response.success(new JSONArray(), HttpHeaderParser.parseCacheHeaders(response));
                             }
                             return Response.success(new JSONArray(), HttpHeaderParser.parseCacheHeaders(response));
@@ -117,7 +118,8 @@ public class VideoCheck extends Service {
 
     @Override
     public void onDestroy() {
-        //Log.e("SFALMA VIDEOCHECK", "ME GAMISE");
+        Log.e("VIDEOCHECK", "onDestroy");
+        this.stopSelf();
         super.onDestroy();
     }
 
