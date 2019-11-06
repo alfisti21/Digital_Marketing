@@ -62,6 +62,7 @@ public class ScreenSaver extends Service {
         }catch (Exception e) {
             e.printStackTrace();
         }
+        stopSelf();
         super.onDestroy();
         Intent broadcastIntent = new Intent(this, ScreenSaverBroadcastReceiver.class);
         sendBroadcast(broadcastIntent);

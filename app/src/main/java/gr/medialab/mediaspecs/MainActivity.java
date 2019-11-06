@@ -44,6 +44,7 @@ import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         boolean alarmUp = (PendingIntent.getBroadcast(getApplicationContext(), 0,
                 new Intent(getApplicationContext(), MyScheduledReceiver.class),
@@ -216,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
                 //builder1.setTitle("MediaSpecs");
-                builder1.setMessage(Html.fromHtml("This solution was built by Angelos Ladopoulos for Medialab Ltd. We are always on the look for talented people. If you feel like one, don't hesitate to contact us at: gmetsis@medialab.gr. You can also find us here: <a href=\"http://www.medialab.gr\">www.medialab.gr</a>"));
+                builder1.setMessage(Html.fromHtml("This application was built by Medialab Ltd. We are always on the look for talented people. If you feel like one, don't hesitate to contact us at: aladopoulos@medialab.gr. You can also find us here: <a href=\"http://www.medialab.gr\">www.medialab.gr</a>"));
                 builder1.setCancelable(true);
                 builder1.setPositiveButton(
                         "CU",
@@ -256,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
                     editor.putString("AUTOCLICK", "");
                     editor.putString("SCREENSAVER", "1");
                     editor.putString("APKVERSION", "");
+                    editor.putString("APKFIRSTINSTALL", "1");
                     editor.apply();
                     Toast toast2 = Toast.makeText(getApplicationContext(), "Παρακαλώ περιμένετε...", Toast.LENGTH_SHORT);
                     toast2.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
@@ -445,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.SECOND, 10);
-        long interval = 4*60*60*1000; //4 hours
+        long interval = 60*60*1000; //1 hours
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), interval, pendingIntent);
     }
 

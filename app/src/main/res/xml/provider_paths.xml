@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /*******************************************************
+  ~  * Copyright (C) 2019-2020 Angelos Ladopoulos ladopoulos.angelos@gmail.com
+  ~  *
+  ~  * This file is part of MediaSpecs Android application.
+  ~  *
+  ~  *MediaSpecs application can not be copied and/or distributed without the express
+  ~  * permission of Angelos Ladopoulos
+  ~  *******************************************************/
+  -->
+
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path name="external_files" path="."/>
+</paths>

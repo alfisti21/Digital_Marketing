@@ -13,6 +13,8 @@ package gr.medialab.mediaspecs;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,6 +47,8 @@ import android.widget.VideoView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,6 +70,8 @@ import static android.view.Gravity.CENTER;
 import static java.lang.Math.round;
 
 public class ScreenSaverActivity extends AppCompatActivity implements SensorEventListener {
+    File to3 = new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder3" + "/" + "MediaSpecs.apk");
+    File to2 = new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder" + "/" + "main1.mp4");
     private SensorManager sensorMan;
     private Sensor accelerometer;
     private float[] mGravity;
@@ -91,6 +97,10 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //ComponentName deviceAdmin = new ComponentName(this, DeviceAdmin.class);
+        //DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        //startLockTask();
+
         String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
         if(checkTime("21:15:00", "08:45:00", currentTime)) {
             Intent i = new Intent(getApplicationContext(), ScreenProtector.class);
@@ -194,8 +204,9 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
                     case (MotionEvent.ACTION_CANCEL) :
                         //Log.d("DEBUG_TAG","Action was CANCEL");
                     case (MotionEvent.ACTION_OUTSIDE) :
+                        //stopLockTask();
                         startService(mServiceIntent);
-                        moveTaskToBack(true);
+                        finishAndRemoveTask();
                         //Log.d("DEBUG_TAG","Action was DOWN");
                         return true;
                     //Log.d("DEBUG_TAG","Movement occurred outside bounds " + "of current screen element");
@@ -371,6 +382,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
         }
 
         video = findViewById(R.id.videoView);
+        if (to2.exists()) {
 
         //Uri uri = Uri.parse(Environment.getExternalStorageDirectory() + "/" + "main1.mp4");
 
@@ -387,9 +399,18 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
 
                 mp.setVolume(0, 0);
                 video.start();
+                Intent service3 = new Intent(getApplicationContext(), ApkVersionCheck.class);
+                startService(service3);
                 //Log.e("On Completion", "Video Playing");
             }
         });
+    }else{
+            Intent i = new Intent(getApplicationContext(), VideoDownload.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            finish();
+        }
 
         video.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -441,7 +462,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
         //int id = Integer.parseInt(verification);
 
         try {
-            InputStream is = new FileInputStream(Environment.getExternalStorageDirectory().toString()+"/"+"response.json");
+            InputStream is = new FileInputStream(Environment.getExternalStorageDirectory().toString()+"/"+".response.json");
             int size = is.available();
             byte[] data = new byte[size];
             is.read(data);
@@ -518,6 +539,9 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
             this.startActivity(i);
         }*/
         super.onResume();
+
+
+
         sensorMan.registerListener(this, accelerometer,
                 SensorManager.SENSOR_DELAY_UI);
     }
@@ -547,7 +571,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
                 FloatingWidgetService mSensorService = new FloatingWidgetService();
                 final Intent mServiceIntent = new Intent(getCtx(), mSensorService.getClass());
                 startService(mServiceIntent);
-                moveTaskToBack(true);
+                finishAndRemoveTask();
                 // do something
             }
         }

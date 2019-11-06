@@ -588,7 +588,7 @@ public class FloatingWidgetService extends Service implements View.OnClickListen
         String verification = myPrefs.getString("SAP", null);
 
         try {
-            InputStream is = new FileInputStream(Environment.getExternalStorageDirectory().toString()+"/"+"response.json");
+            InputStream is = new FileInputStream(Environment.getExternalStorageDirectory().toString()+"/"+".response.json");
             int size = is.available();
             byte[] data = new byte[size];
             is.read(data);

@@ -17,6 +17,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -34,12 +35,12 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 
-//import android.util.Log;
-
 public class VideoDownload3 extends AppCompatActivity {
+	SharedPreferences myPrefs;
     private long downloadID;
     private Uri Download_Uri2 = Uri.parse("https://mediainteractivestorage.blob.core.windows.net/videos/livedevices_intro.mp4");
     File file2=new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder1" + "/" + "intro.mp4");
+
 
     private BroadcastReceiver onDownloadComplete = new BroadcastReceiver() {
         @Override
@@ -71,6 +72,8 @@ public class VideoDownload3 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        File folder = new File(Environment.getExternalStorageDirectory(), ".hiddenFolder1");
+        folder.mkdir();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_video_download3);
         //final Button button = findViewById(R.id.download);
@@ -145,15 +148,14 @@ public class VideoDownload3 extends AppCompatActivity {
                     if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
                         downloading = false;
                     }
-
-                    final int dl_progress = (int) ((bytes_downloaded * 100L) / bytes_total);
+                    final int dl_progress2 = (int) ((bytes_downloaded * 100L) / bytes_total);
 
                     runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {
 
-                            mProgressBar2.setProgress(dl_progress);
+                            mProgressBar2.setProgress(dl_progress2);
 
                         }
                     });

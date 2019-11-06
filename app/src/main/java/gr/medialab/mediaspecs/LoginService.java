@@ -116,6 +116,7 @@ public class LoginService extends Service {
 
     @Override
     public void onDestroy(){
+        stopSelf();
         super.onDestroy();
     }
 }

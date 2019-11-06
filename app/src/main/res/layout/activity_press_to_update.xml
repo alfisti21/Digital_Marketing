@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /*******************************************************
+  ~  * Copyright (C) 2019-2020 Angelos Ladopoulos ladopoulos.angelos@gmail.com
+  ~  *
+  ~  * This file is part of MediaSpecs Android application.
+  ~  *
+  ~  *MediaSpecs application can not be copied and/or distributed without the express
+  ~  * permission of Angelos Ladopoulos
+  ~  *******************************************************/
+  -->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PressToUpdate">
+
+</android.support.constraint.ConstraintLayout>

@@ -11,59 +11,91 @@
 
 package gr.medialab.mediaspecs;
 
-import android.app.ActionBar;
 import android.app.DownloadManager;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-//import android.util.Log;
+import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.File;
-import java.util.ArrayList;
 
-public class VideoDownload extends AppCompatActivity {
+public class ApkDownload extends AppCompatActivity {
     SharedPreferences myPrefs;
-    private long downloadID1;
-    private Uri Download_Uri2 = Uri.parse("https://mediainteractivestorage.blob.core.windows.net/videos/livedevices_main.mp4");
-    File file2=new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder" + "/" + "main.mp4");
+    private long downloadID4;
+    private Uri Download_Uri2 = Uri.parse("https://vdf.livedevices.gr/api/Apk/Vodafone");
+    File file2=new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder3" + "/" + "MediaSpecs1.apk");
+
 
     private BroadcastReceiver onDownloadComplete = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            myPrefs = getSharedPreferences("prefID", Context.MODE_PRIVATE);
+            String apkFirst = myPrefs.getString("APKFIRSTINSTALL", null);
             //Fetching the download id received with the broadcast
             long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
 
             //Checking if the received broadcast is for our enqueued download by matching download id
 
-                File from2 = new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder" + "/" + "main.mp4");
-                File to2 = new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder" + "/" + "main1.mp4");
+                File from2 = new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder3" + "/" + "MediaSpecs1.apk");
+                File to2 = new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder3" + "/" + "MediaSpecs.apk");
                 if(to2.exists()){
                     to2.delete();
                 }
                 from2.renameTo(to2);
-                Toast toast = Toast.makeText(VideoDownload.this, "Download Main.mp4\nCompleted", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(ApkDownload.this, "Download MediaSpecs.apk\nCompleted", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
                 toast.show();
+            if(apkFirst.matches("1")){
+                myPrefs = getSharedPreferences("prefID", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = myPrefs.edit();
+                editor.putString("APKFIRSTINSTALL", "2");
+                editor.apply();
+                finishAndRemoveTask();
+            }else{
+                if (to2.exists()) {
+                    try {
+                        final MediaPlayer mp = MediaPlayer.create(ApkDownload.this, R.raw.notification);
+                        Log.e("APK NOT FOUND", "FOUND");
+                        mp.setVolume(100, 100);
+                        mp.start();
+                        Uri apkFile = Uri.fromFile(to2);
+                        Uri photoURI = FileProvider.getUriForFile(ApkDownload.this,
+                                BuildConfig.APPLICATION_ID + ".provider",
+                                to2);
+                        Intent intent1 = new Intent(Intent.ACTION_VIEW, photoURI);
+                        intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        intent1.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                        intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent1);
+                        finish();
+                    } catch (ActivityNotFoundException e) {
+                        Log.e("APK NOT FOUND", "NOT FOUND");
+                        //tel the user to install viewer to perform this action
+                    }
+
+                }
+            }
                 /*Intent i = new Intent(getApplicationContext(), ScreenSaverActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);*/
-                finish();
+            //finish();
 
         }
     };
@@ -73,7 +105,8 @@ public class VideoDownload extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.activity_video_download);
+        setContentView(R.layout.activity_video_download4);
+
         //final Button button = findViewById(R.id.download);
         /*if(file1.exists()){
             file1.delete();
@@ -102,7 +135,10 @@ public class VideoDownload extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void beginDownload(){
 
-        File folder = new File(Environment.getExternalStorageDirectory(), ".hiddenFolder");
+        myPrefs = getSharedPreferences("prefID", Context.MODE_PRIVATE);
+        String token = myPrefs.getString("TOKEN", null);
+
+        File folder = new File(Environment.getExternalStorageDirectory(), ".hiddenFolder3");
         if(!folder.exists()){
             folder.mkdir();
         }
@@ -111,8 +147,9 @@ public class VideoDownload extends AppCompatActivity {
          */
 
                 DownloadManager.Request request = new DownloadManager.Request(Download_Uri2)
+                        .addRequestHeader("Authorization", "Bearer " + token)
                         .setVisibleInDownloadsUi(false)
-                        .setTitle("main.mp4")// Title of the Download Notification
+                        .setTitle("MediaSpecs.apk")// Title of the Download Notification
                         .setDescription("Downloading...")// Description of the Download Notification
                         .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)// Visibility of the download Notification
                         .setDestinationUri(Uri.fromFile(file2))// Uri of the destination file
@@ -120,9 +157,9 @@ public class VideoDownload extends AppCompatActivity {
                         .setAllowedOverMetered(true)// Set if download is allowed on Mobile network
                         .setAllowedOverRoaming(true);// Set if download is allowed on roaming network
                 final DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                downloadID1 = downloadManager.enqueue(request);// enqueue puts the download request in the queue.
+                downloadID4 = downloadManager.enqueue(request);// enqueue puts the download request in the queue.
 
-                final ProgressBar mProgressBar2 = findViewById(R.id.progressBar1);
+                final ProgressBar mProgressBar2 = findViewById(R.id.progressBar4);
                 mProgressBar2.setScaleY(5f);
 
                 new Thread(new Runnable() {
@@ -135,26 +172,26 @@ public class VideoDownload extends AppCompatActivity {
                         while (downloading) {
 
                             DownloadManager.Query q = new DownloadManager.Query();
-                            q.setFilterById(downloadID1);
+                            q.setFilterById(downloadID4);
 
                             Cursor cursor = downloadManager.query(q);
                             cursor.moveToFirst();
-                            int bytes_downloaded2 = cursor.getInt(cursor
+                            int bytes_downloaded1 = cursor.getInt(cursor
                                     .getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
-                            int bytes_total2 = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                            int bytes_total1 = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
 
                             if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
                                 downloading = false;
                             }
 
-                            final int dl_progress = (int) ((bytes_downloaded2 * 100L) / bytes_total2);
+                            final int dl_progress3 = (int) ((bytes_downloaded1 * 100L) / bytes_total1);
 
                             runOnUiThread(new Runnable() {
 
                                 @Override
                                 public void run() {
 
-                                    mProgressBar2.setProgress(dl_progress);
+                                    mProgressBar2.setProgress(dl_progress3);
 
                                 }
                             });

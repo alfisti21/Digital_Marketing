@@ -43,6 +43,8 @@ import android.widget.VideoView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,6 +60,7 @@ import java.util.Locale;
 import java.util.Random;
 
 public class SecondScreenSaverActivity extends AppCompatActivity implements SensorEventListener {
+	File to2 = new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder1" + "/" + "intro1.mp4");
     private SensorManager sensorMan;
     private Sensor accelerometer;
 
@@ -288,6 +291,7 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
         }
 
         video = findViewById(R.id.videoView10);
+        if (to2.exists()) {
         //Uri uri=Uri.parse(Environment.getExternalStorageDirectory() + "/" + "intro1.mp4");
 
         MediaController mediaController= new MediaController(this);
@@ -302,6 +306,13 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
                 video.start();
             }
         });
+        }else{
+            Intent i = new Intent(getApplicationContext(), VideoDownload3.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            finish();
+        }
 
         video.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -343,7 +354,7 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
         String verification = myPrefs.getString("SAP", null);
 
         try {
-            InputStream is = new FileInputStream(Environment.getExternalStorageDirectory().toString()+"/"+"response.json");
+            InputStream is = new FileInputStream(Environment.getExternalStorageDirectory().toString()+"/"+".response.json");
             int size = is.available();
             byte[] data = new byte[size];
             is.read(data);
