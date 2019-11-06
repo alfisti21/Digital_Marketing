@@ -123,6 +123,8 @@ public class LiveDataService extends Service {
                                             startService(service);
                                             Intent service2 = new Intent(getApplicationContext(), VideoCheck2.class);
                                             startService(service2);
+                                            Intent service3 = new Intent(getApplicationContext(), ApkVersionCheck.class);
+                                            startService(service3);
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -177,6 +179,7 @@ public class LiveDataService extends Service {
             SharedPreferences.Editor editor = myPrefs.edit();
             editor.putString("LIVE DATA SERVICE", "1");
             editor.apply();
+            //Thread.sleep(2000);
             Intent service = new Intent(getApplicationContext(), VideoCheck.class);
             startService(service);
             Intent service2 = new Intent(getApplicationContext(), VideoCheck2.class);

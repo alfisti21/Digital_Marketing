@@ -6,8 +6,8 @@ android {
         applicationId "gr.medialab.mediaspecs"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 16
-        versionName "1.5.3"
+        versionCode 17
+        versionName "1.5.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
