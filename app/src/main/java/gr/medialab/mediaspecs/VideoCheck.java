@@ -17,6 +17,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
+
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -68,11 +71,9 @@ public class VideoCheck extends Service {
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Intent i = new Intent(getApplicationContext(), VideoDownload2.class);
-                                i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(i);
-                                //Log.e("SFALMA VIDEOCHECK", error.toString());
+                                Toast toast = Toast.makeText(getApplicationContext(), "Σφάλμα δικτύου", Toast.LENGTH_LONG);
+                                toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+                                toast.show();
                             }
                         }){
                     @Override
