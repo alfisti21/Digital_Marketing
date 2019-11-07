@@ -17,7 +17,8 @@
         android:inputType="numberPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:importantForAutofill="no" />
 
     <TextView
         android:id="@+id/textView4"
@@ -38,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="66dp"
-        android:text="Confirm"
+        android:text="@string/confirm_pin"
         android:fontFamily="@font/vodafont"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,6 +64,19 @@
         android:layout_margin="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/info2" />
+        app:srcCompat="@drawable/info2"
+        tools:ignore="ContentDescription" />
+
+    <Button
+        android:id="@+id/updateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:fontFamily="@font/vodafont"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:text="@string/update_button_pin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

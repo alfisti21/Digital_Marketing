@@ -18,4 +18,6 @@
     <string name="ok">OK</string>
     <string name="pinHint">PIN</string>
     <string name="appVersion">v1.4.4</string>
+    <string name="update_button_pin">Check For\nUpdate</string>
+    <string name="confirm_pin">Confirm</string>
 </resources>
