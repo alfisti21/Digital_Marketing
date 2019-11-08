@@ -60,6 +60,7 @@ public class PinActivity extends AppCompatActivity {
 
         ImageView info = findViewById(R.id.infoPin);
         Button confirm = findViewById(R.id.button);
+        Button update = findViewById(R.id.updateButton);
         final EditText mEdit = findViewById(R.id.editText);
 
         info.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +80,14 @@ public class PinActivity extends AppCompatActivity {
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
                 ((TextView)alert11.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+            }
+        });
+
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent updateCheck = new Intent(getApplicationContext(), ApkVersionCheck.class);
+                startService(updateCheck);
             }
         });
 
