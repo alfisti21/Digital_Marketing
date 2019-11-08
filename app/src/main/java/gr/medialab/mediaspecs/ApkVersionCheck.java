@@ -15,8 +15,13 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
@@ -105,7 +110,18 @@ public class ApkVersionCheck extends Service {
                                 onDestroy();
                             return Response.success(new JSONArray(), HttpHeaderParser.parseCacheHeaders(response));
                             } else{
+                                Handler handler = new Handler(Looper.getMainLooper());
+                                handler.post(new Runnable() {
 
+                                    @Override
+                                    public void run() {
+                                        Toast toast = Toast.makeText(getApplicationContext(),"Η εφαρμογή MediaSpecs  \nείναι ενημερωμένη", Toast.LENGTH_SHORT);
+                                        TextView v = toast.getView().findViewById(android.R.id.message);
+                                        toast.setGravity(Gravity.TOP, 0, 300);
+                                        if( v != null) v.setGravity(Gravity.CENTER);
+                                        toast.show();
+                                    }
+                                });
                             }
                             return Response.success(new JSONArray(), HttpHeaderParser.parseCacheHeaders(response));
                         } else {
