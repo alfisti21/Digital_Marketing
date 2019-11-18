@@ -88,7 +88,7 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
         return ctx3;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
 
 

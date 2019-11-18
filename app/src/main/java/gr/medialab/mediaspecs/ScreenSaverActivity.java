@@ -96,7 +96,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
     }
 
     //@RequiresApi(api = Build.VERSION_CODES.O)
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -538,7 +538,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
         return true;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onResume() {
         /*String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
