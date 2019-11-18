@@ -606,6 +606,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
 
         Calendar c = Calendar.getInstance();
         c.setTimeZone(TimeZone.getTimeZone("Europe/Athens"));
+        c.setTime(new Date());
 
         Date now = c.getTime();
 

@@ -482,6 +482,7 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
 
         Calendar c = Calendar.getInstance();
         c.setTimeZone(TimeZone.getTimeZone("Europe/Athens"));
+        c.setTime(new Date());
 
         Date now = c.getTime();
 
