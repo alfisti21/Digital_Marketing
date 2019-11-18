@@ -98,7 +98,7 @@ public class LiveDataService extends Service {
                             @Override
                             public void onResponse(JSONArray response) {
                                 if(response.length()==0){
-                                    Toast toast = Toast.makeText(getApplicationContext(), "Λάθος SAP\nΔοκιμάστε ξανά", Toast.LENGTH_LONG);
+                                    Toast toast = Toast.makeText(getApplicationContext(), "Λάθος SAP\nΔοκιμάστε ξανά", Toast.LENGTH_SHORT);
                                     toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
                                     toast.show();
                                     Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
@@ -135,7 +135,7 @@ public class LiveDataService extends Service {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 //Log.e("SFALMA JSON", error.toString());
-                                Toast toast = Toast.makeText(getApplicationContext(), "Λάθος SAP2\nΔοκιμάστε ξανά", Toast.LENGTH_LONG);
+                                Toast toast = Toast.makeText(getApplicationContext(), "Λάθος SAP2\nΔοκιμάστε ξανά", Toast.LENGTH_SHORT);
                                 toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
                                 toast.show();
                                 Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
@@ -172,7 +172,7 @@ public class LiveDataService extends Service {
             file.write(mJsonResponse);
             file.flush();
             file.close();
-            Toast toast = Toast.makeText(getApplicationContext(), "Τα δεδομένα\nαποθηκεύτηκαν επιτυχώς", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(getApplicationContext(), "Τα δεδομένα\nαποθηκεύτηκαν επιτυχώς", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
             toast.show();
             myPrefs = getSharedPreferences("prefID", Context.MODE_PRIVATE);
