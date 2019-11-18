@@ -13,6 +13,7 @@ package gr.medialab.mediaspecs;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,11 +35,13 @@ import android.os.Bundle;
 //import android.util.Log;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,9 +58,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
+import java.util.TimeZone;
 
 public class SecondScreenSaverActivity extends AppCompatActivity implements SensorEventListener {
 	File to2 = new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder1" + "/" + "intro1.mp4");
@@ -83,7 +88,7 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
         return ctx3;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
 
 
@@ -110,7 +115,8 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
         final Intent mServiceIntent2 = new Intent(getCtx3(), mSensorService2.getClass());
 
         if(iterationInt>20){
-            startService(mServiceIntent2);
+            //startService(mServiceIntent2);
+            //moveTaskToBack(true);
             finishAndRemoveTask();
             SharedPreferences.Editor editor = myPrefs.edit();
             editor.putString("SCREENSAVER", "1");
@@ -144,7 +150,7 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        if(checkTime("21:15:00", "08:45:00", currentTime)){
+        if(nowIsBetweenTwoHours(21,15 , 8, 45)){
             finishAndRemoveTask();
             //Log.e("EINAI METAKSI?","EINAI");
             params.screenBrightness = 0.1f;
@@ -189,6 +195,11 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
                     case (MotionEvent.ACTION_CANCEL) :
                         //Log.d("DEBUG_TAG","Action was CANCEL");
                     case (MotionEvent.ACTION_OUTSIDE) :
+                        DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                        // First, confirm that this package is whitelisted to run in lock task mode.
+                        if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                            stopLockTask();
+                        }
                         finishAndRemoveTask();
                         //Log.d("DEBUG_TAG","Action was DOWN");
                         return true;
@@ -413,6 +424,13 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
     @Override
     public void onResume() {
         super.onResume();
+
+        DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        // First, confirm that this package is whitelisted to run in lock task mode.
+        if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+            startLockTask();
+        }
+
         sensorMan.registerListener(this, accelerometer,
                 SensorManager.SENSOR_DELAY_UI);
     }
@@ -439,6 +457,11 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
             // Make this higher or lower according to how much
             // motion you want to detect
             if(mAccel > 3){
+                DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                // First, confirm that this package is whitelisted to run in lock task mode.
+                if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                    stopLockTask();
+                }
                 finishAndRemoveTask();
                 // do something
             }
@@ -451,21 +474,31 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private static boolean checkTime(String startTime, String endTime, String checkTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.US);
-        LocalTime startLocalTime = LocalTime.parse(startTime, formatter);
-        LocalTime endLocalTime = LocalTime.parse(endTime, formatter);
-        LocalTime checkLocalTime = LocalTime.parse(checkTime, formatter);
+    boolean  nowIsBetweenTwoHours(int fromHour, int fromMinute, int toHour, int toMinute) {
 
-        boolean isInBetween = false;
-        if (endLocalTime.isAfter(startLocalTime)) {
-            if (startLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)) {
-                isInBetween = true;
-            }
-        } else if (checkLocalTime.isAfter(startLocalTime) || checkLocalTime.isBefore(endLocalTime)) {
-            isInBetween = true;
+        Calendar c = Calendar.getInstance();
+        c.setTimeZone(TimeZone.getTimeZone("Europe/Athens"));
+
+        Date now = c.getTime();
+
+        c.set(Calendar.HOUR_OF_DAY, fromHour);
+        c.set(Calendar.MINUTE, fromMinute);
+
+        Date from = c.getTime();
+
+        if (toHour < fromHour) {
+            c.add(Calendar.DATE, 1);
         }
-        return isInBetween;
+
+        c.set(Calendar.HOUR_OF_DAY, toHour);
+        c.set(Calendar.MINUTE, toMinute);
+
+        Date to = c.getTime();
+
+        // System.out.println(a);
+        // System.out.println(b);
+        // System.out.println(d);
+
+        return from.compareTo(now) * now.compareTo(to) >= 0;
     }
 }

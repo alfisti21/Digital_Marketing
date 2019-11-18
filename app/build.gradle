@@ -4,10 +4,10 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "gr.medialab.mediaspecs"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 28
-        versionCode 18
-        versionName "1.5.5"
+        versionCode 23
+        versionName "1.6.0"
         setProperty("archivesBaseName", "MediaSpecs v$versionName")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

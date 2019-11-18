@@ -36,6 +36,7 @@ import android.os.Bundle;
 //import android.util.Log;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -43,6 +44,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,6 +67,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static android.view.Gravity.CENTER;
 import static java.lang.Math.round;
@@ -93,16 +96,15 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
     }
 
     //@RequiresApi(api = Build.VERSION_CODES.O)
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //ComponentName deviceAdmin = new ComponentName(this, DeviceAdmin.class);
-        //DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-        //startLockTask();
+
 
         String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-        if(checkTime("21:15:00", "08:45:00", currentTime)) {
+        if(nowIsBetweenTwoHours(21,15 , 8, 45)) {
             Intent i = new Intent(getApplicationContext(), ScreenProtector.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
@@ -158,7 +160,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        if(checkTime("21:15:00", "08:45:00", currentTime)){
+        if(nowIsBetweenTwoHours(21,15 , 8, 45)){
             //Log.e("EINAI METAKSI?","EINAI");
             params.screenBrightness = 0.1f;
         }else{
@@ -204,7 +206,11 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
                     case (MotionEvent.ACTION_CANCEL) :
                         //Log.d("DEBUG_TAG","Action was CANCEL");
                     case (MotionEvent.ACTION_OUTSIDE) :
-                        //stopLockTask();
+                        DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                        // First, confirm that this package is whitelisted to run in lock task mode.
+                        if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                            stopLockTask();
+                        }
                         startService(mServiceIntent);
                         finishAndRemoveTask();
                         //Log.d("DEBUG_TAG","Action was DOWN");
@@ -416,6 +422,11 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
             @Override
             public void onCompletion(MediaPlayer mp) {
                 //Log.e("On Completion", "On Completion is accessed");
+                DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                // First, confirm that this package is whitelisted to run in lock task mode.
+                if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                    stopLockTask();
+                }
 
                 start2();
                 //onDestroy();
@@ -527,7 +538,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
         return true;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onResume() {
         /*String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
@@ -540,7 +551,11 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
         }*/
         super.onResume();
 
-
+        DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        // First, confirm that this package is whitelisted to run in lock task mode.
+        if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+            startLockTask();
+        }
 
         sensorMan.registerListener(this, accelerometer,
                 SensorManager.SENSOR_DELAY_UI);
@@ -568,6 +583,10 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
             // Make this higher or lower according to how much
             // motion you want to detect
             if(mAccel > 3){
+                DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                    stopLockTask();
+                }
                 FloatingWidgetService mSensorService = new FloatingWidgetService();
                 final Intent mServiceIntent = new Intent(getCtx(), mSensorService.getClass());
                 startService(mServiceIntent);
@@ -583,22 +602,32 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private static boolean checkTime(String startTime, String endTime, String checkTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.US);
-        LocalTime startLocalTime = LocalTime.parse(startTime, formatter);
-        LocalTime endLocalTime = LocalTime.parse(endTime, formatter);
-        LocalTime checkLocalTime = LocalTime.parse(checkTime, formatter);
+    boolean  nowIsBetweenTwoHours(int fromHour, int fromMinute, int toHour, int toMinute) {
 
-        boolean isInBetween = false;
-        if (endLocalTime.isAfter(startLocalTime)) {
-            if (startLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)) {
-                isInBetween = true;
-            }
-        } else if (checkLocalTime.isAfter(startLocalTime) || checkLocalTime.isBefore(endLocalTime)) {
-            isInBetween = true;
+        Calendar c = Calendar.getInstance();
+        c.setTimeZone(TimeZone.getTimeZone("Europe/Athens"));
+
+        Date now = c.getTime();
+
+        c.set(Calendar.HOUR_OF_DAY, fromHour);
+        c.set(Calendar.MINUTE, fromMinute);
+
+        Date from = c.getTime();
+
+        if (toHour < fromHour) {
+            c.add(Calendar.DATE, 1);
         }
-        return isInBetween;
+
+        c.set(Calendar.HOUR_OF_DAY, toHour);
+        c.set(Calendar.MINUTE, toMinute);
+
+        Date to = c.getTime();
+
+        // System.out.println(a);
+        // System.out.println(b);
+        // System.out.println(d);
+
+        return from.compareTo(now) * now.compareTo(to) >= 0;
     }
 
 }

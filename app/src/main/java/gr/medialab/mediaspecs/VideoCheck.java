@@ -71,7 +71,7 @@ public class VideoCheck extends Service {
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Toast toast = Toast.makeText(getApplicationContext(), "Σφάλμα δικτύου", Toast.LENGTH_LONG);
+                                Toast toast = Toast.makeText(getApplicationContext(), "Σφάλμα δικτύου", Toast.LENGTH_SHORT);
                                 toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
                                 toast.show();
                             }

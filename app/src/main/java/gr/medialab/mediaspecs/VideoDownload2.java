@@ -64,7 +64,7 @@ public class VideoDownload2 extends AppCompatActivity {
                 }
                 from1.renameTo(to1);
                 from2.renameTo(to2);
-                Toast toast = Toast.makeText(VideoDownload2.this, "Download Completed", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(VideoDownload2.this, "Download Completed", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
                 toast.show();
                 /*Intent i = new Intent(getApplicationContext(), ScreenSaverActivity.class);

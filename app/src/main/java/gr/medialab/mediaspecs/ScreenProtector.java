@@ -13,6 +13,7 @@ package gr.medialab.mediaspecs;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -22,16 +23,20 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static android.graphics.Color.BLACK;
 
@@ -46,7 +51,7 @@ public class ScreenProtector extends AppCompatActivity {
         return ctx;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +59,7 @@ public class ScreenProtector extends AppCompatActivity {
         //Log.e("ARXI TO TIMER", "ARXI");
 
         String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-        if(!checkTime("21:15:00", "08:45:00", currentTime)) {
+        if(!nowIsBetweenTwoHours(21,15 , 8, 45)) {
             finishAndRemoveTask();
         }
 
@@ -103,6 +108,11 @@ public class ScreenProtector extends AppCompatActivity {
                     case (MotionEvent.ACTION_CANCEL) :
                         //Log.d("DEBUG_TAG","Action was CANCEL");
                     case (MotionEvent.ACTION_OUTSIDE) :
+                        DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                        // First, confirm that this package is whitelisted to run in lock task mode.
+                        if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                            stopLockTask();
+                        }
                         startService(mServiceIntent);
                         finishAndRemoveTask();
                         //Log.d("DEBUG_TAG","Action was DOWN");
@@ -121,6 +131,11 @@ public class ScreenProtector extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                // First, confirm that this package is whitelisted to run in lock task mode.
+                if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                    stopLockTask();
+                }
                 //Log.e("TELOS TO TIMER", "TELOS");
                 Intent refresh = new Intent(getApplicationContext(), ScreenProtector.class);
                 startActivity(refresh);//Start the same Activity
@@ -132,6 +147,16 @@ public class ScreenProtector extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        // First, confirm that this package is whitelisted to run in lock task mode.
+        if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+            stopLockTask();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         //Log.e("TELOS TO TIMER", "TELOS APO ONDESTROY");
         mCountDownTimer.cancel();
@@ -139,22 +164,32 @@ public class ScreenProtector extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private static boolean checkTime(String startTime, String endTime, String checkTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.US);
-        LocalTime startLocalTime = LocalTime.parse(startTime, formatter);
-        LocalTime endLocalTime = LocalTime.parse(endTime, formatter);
-        LocalTime checkLocalTime = LocalTime.parse(checkTime, formatter);
+    boolean  nowIsBetweenTwoHours(int fromHour, int fromMinute, int toHour, int toMinute) {
 
-        boolean isInBetween = false;
-        if (endLocalTime.isAfter(startLocalTime)) {
-            if (startLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)) {
-                isInBetween = true;
-            }
-        } else if (checkLocalTime.isAfter(startLocalTime) || checkLocalTime.isBefore(endLocalTime)) {
-            isInBetween = true;
+        Calendar c = Calendar.getInstance();
+        c.setTimeZone(TimeZone.getTimeZone("Europe/Athens"));
+
+        Date now = c.getTime();
+
+        c.set(Calendar.HOUR_OF_DAY, fromHour);
+        c.set(Calendar.MINUTE, fromMinute);
+
+        Date from = c.getTime();
+
+        if (toHour < fromHour) {
+            c.add(Calendar.DATE, 1);
         }
-        return isInBetween;
+
+        c.set(Calendar.HOUR_OF_DAY, toHour);
+        c.set(Calendar.MINUTE, toMinute);
+
+        Date to = c.getTime();
+
+        // System.out.println(a);
+        // System.out.println(b);
+        // System.out.println(d);
+
+        return from.compareTo(now) * now.compareTo(to) >= 0;
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
