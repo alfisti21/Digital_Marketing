@@ -152,7 +152,7 @@ public class ScreenProtector extends AppCompatActivity {
         DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         // First, confirm that this package is whitelisted to run in lock task mode.
         if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
-            stopLockTask();
+            startLockTask();
         }
     }
 

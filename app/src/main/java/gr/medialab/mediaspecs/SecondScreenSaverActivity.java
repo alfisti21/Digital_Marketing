@@ -117,6 +117,10 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
         if(iterationInt>20){
             //startService(mServiceIntent2);
             //moveTaskToBack(true);
+            DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+            if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                stopLockTask();
+            }
             finishAndRemoveTask();
             SharedPreferences.Editor editor = myPrefs.edit();
             editor.putString("SCREENSAVER", "1");
