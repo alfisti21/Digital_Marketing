@@ -18,6 +18,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static android.app.admin.DevicePolicyManager.PERMISSION_POLICY_AUTO_GRANT;
+
 public class DeviceAdmin extends DeviceAdminReceiver {
 
     @Override
@@ -47,12 +52,16 @@ public class DeviceAdmin extends DeviceAdminReceiver {
     public void onProfileProvisioningComplete (Context context, Intent intent){
         String KIOSK_PACKAGE = "gr.medialab.mediaspecs";
         String[] APP_PACKAGES = {KIOSK_PACKAGE};
+        List<String> list = Arrays.asList(APP_PACKAGES);
 
 
         DevicePolicyManager dpm =
                 (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
         ComponentName adminName = getComponentName(context);
         dpm.setLockTaskPackages(adminName, APP_PACKAGES);
+        dpm.setMaximumTimeToLock(adminName, 60*1000L);
+        dpm.setPermissionPolicy(adminName, PERMISSION_POLICY_AUTO_GRANT);
+        dpm.setPermittedAccessibilityServices(adminName, list);
     }
 
     public static ComponentName getComponentName(Context context) {
