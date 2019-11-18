@@ -95,7 +95,7 @@ public class LoginService extends Service {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     //Log.e("SFALMA LOGIN", error.toString());
-                    Toast toast = Toast.makeText(getApplicationContext(), "Λάθος Email\nή/και Password", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(getApplicationContext(), "Λάθος Email\nή/και Password", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
                     toast.show();
                     Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
