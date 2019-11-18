@@ -137,7 +137,7 @@ public class PinActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = myPrefs.edit();
                     editor.putString("PIN", "True");
                     editor.apply();
-                    Toast toast1 = Toast.makeText(getApplicationContext(), "PIN correct", Toast.LENGTH_LONG);
+                    Toast toast1 = Toast.makeText(getApplicationContext(), "PIN correct", Toast.LENGTH_SHORT);
                     toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
                     toast1.show();
                     //Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.android.settings");
@@ -145,7 +145,7 @@ public class PinActivity extends AppCompatActivity {
                     finish();
                 } else {
                     mEdit.setText(null);
-                    Toast toast2 = Toast.makeText(getApplicationContext(), "PIN incorrect\nPlease try again", Toast.LENGTH_LONG);
+                    Toast toast2 = Toast.makeText(getApplicationContext(), "PIN incorrect\nPlease try again", Toast.LENGTH_SHORT);
                     toast2.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
                     toast2.show();
                 }
