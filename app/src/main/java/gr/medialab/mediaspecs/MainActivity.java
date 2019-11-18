@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                     }else{
                         //Log.e("EXO INTERNET?","DEN EXO");
-                        Toast toast1 = Toast.makeText(getApplicationContext(), "Δοκιμάστε ξανά αργότερα\nΔεν υπάρχει σύνδεση\nστο διαδίκτυο", Toast.LENGTH_LONG);
+                        Toast toast1 = Toast.makeText(getApplicationContext(), "Δοκιμάστε ξανά αργότερα\nΔεν υπάρχει σύνδεση\nστο διαδίκτυο", Toast.LENGTH_SHORT);
                         toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
                         toast1.show();
                         finish();
