@@ -51,9 +51,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.net.NetworkInterface;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+
+import static android.app.admin.DevicePolicyManager.PERMISSION_POLICY_AUTO_GRANT;
 
 public class MainActivity extends AppCompatActivity {
     String versionName = BuildConfig.VERSION_NAME;
@@ -87,8 +90,20 @@ public class MainActivity extends AppCompatActivity {
         return ctx5;
     }
 
+    String KIOSK_PACKAGE = "gr.medialab.mediaspecs";
+    String[] APP_PACKAGES = {KIOSK_PACKAGE};
+    List<String> list = Arrays.asList(APP_PACKAGES);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DevicePolicyManager dpm = (DevicePolicyManager) getApplicationContext().getSystemService(Context.DEVICE_POLICY_SERVICE);
+        ComponentName adminName = new ComponentName(getApplicationContext(),DeviceAdmin.class);
+        if(dpm.isDeviceOwnerApp("gr.medialab.mediaspecs")){
+            dpm.setLockTaskPackages(adminName, APP_PACKAGES);
+            dpm.setMaximumTimeToLock(adminName, 60*1000L);
+            dpm.setPermissionPolicy(adminName, PERMISSION_POLICY_AUTO_GRANT);
+            dpm.setPermittedAccessibilityServices(adminName, list);
+        }
         super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
