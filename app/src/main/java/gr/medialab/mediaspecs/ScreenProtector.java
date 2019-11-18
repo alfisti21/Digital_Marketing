@@ -33,8 +33,10 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static android.graphics.Color.BLACK;
 
@@ -57,7 +59,7 @@ public class ScreenProtector extends AppCompatActivity {
         //Log.e("ARXI TO TIMER", "ARXI");
 
         String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-        if(!checkTime("21:15:00", "08:45:00", currentTime)) {
+        if(!nowIsBetweenTwoHours(21,15 , 8, 45)) {
             finishAndRemoveTask();
         }
 
@@ -162,22 +164,32 @@ public class ScreenProtector extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private static boolean checkTime(String startTime, String endTime, String checkTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.US);
-        LocalTime startLocalTime = LocalTime.parse(startTime, formatter);
-        LocalTime endLocalTime = LocalTime.parse(endTime, formatter);
-        LocalTime checkLocalTime = LocalTime.parse(checkTime, formatter);
+    boolean  nowIsBetweenTwoHours(int fromHour, int fromMinute, int toHour, int toMinute) {
 
-        boolean isInBetween = false;
-        if (endLocalTime.isAfter(startLocalTime)) {
-            if (startLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)) {
-                isInBetween = true;
-            }
-        } else if (checkLocalTime.isAfter(startLocalTime) || checkLocalTime.isBefore(endLocalTime)) {
-            isInBetween = true;
+        Calendar c = Calendar.getInstance();
+        c.setTimeZone(TimeZone.getTimeZone("Europe/Athens"));
+
+        Date now = c.getTime();
+
+        c.set(Calendar.HOUR_OF_DAY, fromHour);
+        c.set(Calendar.MINUTE, fromMinute);
+
+        Date from = c.getTime();
+
+        if (toHour < fromHour) {
+            c.add(Calendar.DATE, 1);
         }
-        return isInBetween;
+
+        c.set(Calendar.HOUR_OF_DAY, toHour);
+        c.set(Calendar.MINUTE, toMinute);
+
+        Date to = c.getTime();
+
+        // System.out.println(a);
+        // System.out.println(b);
+        // System.out.println(d);
+
+        return from.compareTo(now) * now.compareTo(to) >= 0;
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
