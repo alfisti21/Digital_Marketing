@@ -36,6 +36,7 @@ import android.os.Bundle;
 //import android.util.Log;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -43,6 +44,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -98,8 +100,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //ComponentName deviceAdmin = new ComponentName(this, DeviceAdmin.class);
-        //DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-        //startLockTask();
+
 
         String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
         if(checkTime("21:15:00", "08:45:00", currentTime)) {
@@ -204,7 +205,11 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
                     case (MotionEvent.ACTION_CANCEL) :
                         //Log.d("DEBUG_TAG","Action was CANCEL");
                     case (MotionEvent.ACTION_OUTSIDE) :
-                        //stopLockTask();
+                        DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                        // First, confirm that this package is whitelisted to run in lock task mode.
+                        if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                            stopLockTask();
+                        }
                         startService(mServiceIntent);
                         finishAndRemoveTask();
                         //Log.d("DEBUG_TAG","Action was DOWN");
@@ -416,6 +421,11 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
             @Override
             public void onCompletion(MediaPlayer mp) {
                 //Log.e("On Completion", "On Completion is accessed");
+                DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                // First, confirm that this package is whitelisted to run in lock task mode.
+                if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                    stopLockTask();
+                }
 
                 start2();
                 //onDestroy();
@@ -540,7 +550,11 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
         }*/
         super.onResume();
 
-
+        DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        // First, confirm that this package is whitelisted to run in lock task mode.
+        if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+            startLockTask();
+        }
 
         sensorMan.registerListener(this, accelerometer,
                 SensorManager.SENSOR_DELAY_UI);
@@ -568,6 +582,10 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
             // Make this higher or lower according to how much
             // motion you want to detect
             if(mAccel > 3){
+                DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                    stopLockTask();
+                }
                 FloatingWidgetService mSensorService = new FloatingWidgetService();
                 final Intent mServiceIntent = new Intent(getCtx(), mSensorService.getClass());
                 startService(mServiceIntent);
