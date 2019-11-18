@@ -110,13 +110,6 @@ public class ScreenProtector extends AppCompatActivity {
                         // First, confirm that this package is whitelisted to run in lock task mode.
                         if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
                             stopLockTask();
-                            Toast toast1 = Toast.makeText(getApplicationContext(), "package is whitelisted", Toast.LENGTH_SHORT);
-                            toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
-                            toast1.show();
-                        } else {
-                            Toast toast1 = Toast.makeText(getApplicationContext(), "package is NOT whitelisted", Toast.LENGTH_SHORT);
-                            toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
-                            toast1.show();
                         }
                         startService(mServiceIntent);
                         finishAndRemoveTask();
@@ -140,13 +133,6 @@ public class ScreenProtector extends AppCompatActivity {
                 // First, confirm that this package is whitelisted to run in lock task mode.
                 if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
                     stopLockTask();
-                    Toast toast1 = Toast.makeText(getApplicationContext(), "package is whitelisted", Toast.LENGTH_SHORT);
-                    toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
-                    toast1.show();
-                } else {
-                    Toast toast1 = Toast.makeText(getApplicationContext(), "package is NOT whitelisted", Toast.LENGTH_SHORT);
-                    toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
-                    toast1.show();
                 }
                 //Log.e("TELOS TO TIMER", "TELOS");
                 Intent refresh = new Intent(getApplicationContext(), ScreenProtector.class);
@@ -165,13 +151,6 @@ public class ScreenProtector extends AppCompatActivity {
         // First, confirm that this package is whitelisted to run in lock task mode.
         if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
             stopLockTask();
-            Toast toast1 = Toast.makeText(getApplicationContext(), "package is whitelisted", Toast.LENGTH_SHORT);
-            toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
-            toast1.show();
-        } else {
-            Toast toast1 = Toast.makeText(getApplicationContext(), "package is NOT whitelisted", Toast.LENGTH_SHORT);
-            toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
-            toast1.show();
         }
     }
 
