@@ -13,6 +13,7 @@ package gr.medialab.mediaspecs;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -22,10 +23,12 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -103,6 +106,18 @@ public class ScreenProtector extends AppCompatActivity {
                     case (MotionEvent.ACTION_CANCEL) :
                         //Log.d("DEBUG_TAG","Action was CANCEL");
                     case (MotionEvent.ACTION_OUTSIDE) :
+                        DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                        // First, confirm that this package is whitelisted to run in lock task mode.
+                        if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                            stopLockTask();
+                            Toast toast1 = Toast.makeText(getApplicationContext(), "package is whitelisted", Toast.LENGTH_SHORT);
+                            toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+                            toast1.show();
+                        } else {
+                            Toast toast1 = Toast.makeText(getApplicationContext(), "package is NOT whitelisted", Toast.LENGTH_SHORT);
+                            toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+                            toast1.show();
+                        }
                         startService(mServiceIntent);
                         finishAndRemoveTask();
                         //Log.d("DEBUG_TAG","Action was DOWN");
@@ -121,6 +136,18 @@ public class ScreenProtector extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                // First, confirm that this package is whitelisted to run in lock task mode.
+                if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                    stopLockTask();
+                    Toast toast1 = Toast.makeText(getApplicationContext(), "package is whitelisted", Toast.LENGTH_SHORT);
+                    toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+                    toast1.show();
+                } else {
+                    Toast toast1 = Toast.makeText(getApplicationContext(), "package is NOT whitelisted", Toast.LENGTH_SHORT);
+                    toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+                    toast1.show();
+                }
                 //Log.e("TELOS TO TIMER", "TELOS");
                 Intent refresh = new Intent(getApplicationContext(), ScreenProtector.class);
                 startActivity(refresh);//Start the same Activity
@@ -129,6 +156,23 @@ public class ScreenProtector extends AppCompatActivity {
         };
         mCountDownTimer.start();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        // First, confirm that this package is whitelisted to run in lock task mode.
+        if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+            stopLockTask();
+            Toast toast1 = Toast.makeText(getApplicationContext(), "package is whitelisted", Toast.LENGTH_SHORT);
+            toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+            toast1.show();
+        } else {
+            Toast toast1 = Toast.makeText(getApplicationContext(), "package is NOT whitelisted", Toast.LENGTH_SHORT);
+            toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+            toast1.show();
+        }
     }
 
     @Override
