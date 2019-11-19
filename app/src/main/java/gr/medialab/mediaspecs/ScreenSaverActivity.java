@@ -74,8 +74,6 @@ import static android.view.Gravity.CENTER;
 import static java.lang.Math.round;
 
 public class ScreenSaverActivity extends AppCompatActivity implements SensorEventListener {
-    PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-    PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK ,"ScreenSaver::WakelockTag");
     File to3 = new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder3" + "/" + "MediaSpecs.apk");
     File to2 = new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder" + "/" + "main1.mp4");
     private SensorManager sensorMan;
@@ -511,9 +509,6 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
     protected void onDestroy() {
         finishAndRemoveTask();
         super.onDestroy();
-        if(wakeLock != null &&wakeLock.isHeld ()) {
-            wakeLock.release();
-        }
     }
 
     protected void start2()  {
@@ -556,7 +551,6 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
             this.startActivity(i);
         }*/
         super.onResume();
-        wakeLock.acquire(5*60*1000L /*5 minutes*/);
 
         DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         // First, confirm that this package is whitelisted to run in lock task mode.
@@ -572,9 +566,6 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
     protected void onPause() {
         super.onPause();
         sensorMan.unregisterListener(this);
-        if(wakeLock != null &&wakeLock.isHeld ()) {
-            wakeLock.release();
-        }
     }
 
 

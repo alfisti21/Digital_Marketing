@@ -66,8 +66,6 @@ import java.util.Random;
 import java.util.TimeZone;
 
 public class SecondScreenSaverActivity extends AppCompatActivity implements SensorEventListener {
-    PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-    PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK ,"ScreenSaver::WakelockTag");
 	File to2 = new File(Environment.getExternalStorageDirectory() + "/" + ".hiddenFolder1" + "/" + "intro1.mp4");
     private SensorManager sensorMan;
     private Sensor accelerometer;
@@ -426,15 +424,11 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
     protected void onDestroy() {
         finishAndRemoveTask();
         super.onDestroy();
-        if(wakeLock != null &&wakeLock.isHeld ()) {
-            wakeLock.release();
-        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        wakeLock.acquire(5*60*1000L /*5 minutes*/);
 
         DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         // First, confirm that this package is whitelisted to run in lock task mode.
@@ -450,9 +444,6 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
     protected void onPause() {
         super.onPause();
         sensorMan.unregisterListener(this);
-        if(wakeLock != null &&wakeLock.isHeld ()) {
-            wakeLock.release();
-        }
     }
 
 
