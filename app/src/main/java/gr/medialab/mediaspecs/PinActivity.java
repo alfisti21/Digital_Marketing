@@ -142,7 +142,7 @@ public class PinActivity extends AppCompatActivity {
                     toast1.show();
                     //Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.android.settings");
                     //startActivity( launchIntent );
-                    finish();
+                    finishAndRemoveTask();
                 } else {
                     mEdit.setText(null);
                     Toast toast2 = Toast.makeText(getApplicationContext(), "PIN incorrect\nPlease try again", Toast.LENGTH_SHORT);
@@ -164,6 +164,12 @@ public class PinActivity extends AppCompatActivity {
         this.recreate();
         //finish();
         //startActivity(new Intent(PinActivity.this,PinActivity.class));
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        finishAndRemoveTask();
     }
 
     @Override
