@@ -602,20 +602,31 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
 
     }
 
-    boolean  nowIsBetweenTwoHours(int fromHour, int fromMinute, int toHour, int toMinute) {
+    public static boolean  nowIsBetweenTwoHours(
+            int fromHour, int fromMinute,
+            int toHour, int toMinute
+    ) {
+        boolean nowInNewDay = false;
 
-        Calendar c = Calendar.getInstance();
-        c.setTimeZone(TimeZone.getTimeZone("Europe/Athens"));
-        c.setTime(new Date());
+        Calendar c = getLocalCalendar();
 
         Date now = c.getTime();
+
+        c = getLocalCalendar();
+
+        if (fromHour > c.get(Calendar.HOUR_OF_DAY)) {
+            c.add(Calendar.DATE, -1);
+            nowInNewDay = true;
+        }
 
         c.set(Calendar.HOUR_OF_DAY, fromHour);
         c.set(Calendar.MINUTE, fromMinute);
 
         Date from = c.getTime();
 
-        if (toHour < fromHour) {
+        c = getLocalCalendar();
+
+        if (!nowInNewDay && toHour < fromHour) {
             c.add(Calendar.DATE, 1);
         }
 
@@ -624,11 +635,30 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
 
         Date to = c.getTime();
 
-        // System.out.println(a);
-        // System.out.println(b);
-        // System.out.println(d);
+        //System.out.println(from);
+        //System.out.println(now);
+        //System.out.println(to);
 
-        return from.compareTo(now) * now.compareTo(to) >= 0;
+        return from.before(now) && now.before(to);
+    }
+    private static Calendar getLocalCalendar() {
+        Calendar c = Calendar.getInstance();
+        TimeZone fromTimeZone = c.getTimeZone();
+        TimeZone toTimeZone = TimeZone.getTimeZone("Europe/Athens");
+
+        c.setTime(new Date());
+
+        c.setTimeZone(fromTimeZone);
+        c.add(Calendar.MILLISECOND, fromTimeZone.getRawOffset() * -1);
+        if (fromTimeZone.inDaylightTime(c.getTime())) {
+            c.add(Calendar.MILLISECOND, c.getTimeZone().getDSTSavings() * -1);
+        }
+
+        c.add(Calendar.MILLISECOND, toTimeZone.getRawOffset());
+        if (toTimeZone.inDaylightTime(c.getTime())) {
+            c.add(Calendar.MILLISECOND, toTimeZone.getDSTSavings());
+        }
+        return c;
     }
 
 }
