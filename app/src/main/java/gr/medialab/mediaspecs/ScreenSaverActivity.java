@@ -427,9 +427,9 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
                 //Log.e("On Completion", "On Completion is accessed");
                 DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
                 // First, confirm that this package is whitelisted to run in lock task mode.
-                if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                /*if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
                     stopLockTask();
-                }
+                }*/
 
                 start2();
                 //onDestroy();
