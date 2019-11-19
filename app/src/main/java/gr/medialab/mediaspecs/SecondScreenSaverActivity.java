@@ -154,7 +154,7 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        getWindow().addFlags(WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY);
+        //getWindow().addFlags(WindowManager.LayoutParams.TYPE_PHONE);
         WindowManager.LayoutParams params = getWindow().getAttributes();
         if(nowIsBetweenTwoHours(21,15 , 8, 45)){
             finishAndRemoveTask();
