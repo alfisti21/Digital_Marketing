@@ -58,12 +58,12 @@ public class PinActivity extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
-        ImageView info = findViewById(R.id.infoPin);
+        //ImageView info = findViewById(R.id.infoPin);
         Button confirm = findViewById(R.id.button);
         Button update = findViewById(R.id.updateButton);
         final EditText mEdit = findViewById(R.id.editText);
 
-        info.setOnClickListener(new View.OnClickListener() {
+        /*info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(PinActivity.this);
@@ -81,7 +81,7 @@ public class PinActivity extends AppCompatActivity {
                 alert11.show();
                 ((TextView)alert11.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
             }
-        });
+        });*/
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override

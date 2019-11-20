@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Button confirm = findViewById(R.id.button);
-        ImageView info = findViewById(R.id.infoMain);
+        //ImageView info = findViewById(R.id.infoMain);
         TextView txtVersion = findViewById(R.id.textViewVersion);
         txtVersion.setText(versionName);
         final EditText sapCode = findViewById(R.id.editText3);
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        info.setOnClickListener(new View.OnClickListener() {
+        /*info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                 alert11.show();
                 ((TextView)alert11.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
             }
-        });
+        });*/
 
 
         confirm.setOnClickListener(new View.OnClickListener() {
