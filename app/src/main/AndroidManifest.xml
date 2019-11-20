@@ -64,10 +64,14 @@
         <activity
             android:name=".SecondScreenSaverActivity"
             android:excludeFromRecents="true"
+            android:keepScreenOn="true"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".ScreenSaverActivity"
             android:excludeFromRecents="true"
+            android:keepScreenOn="true"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".PinActivity"

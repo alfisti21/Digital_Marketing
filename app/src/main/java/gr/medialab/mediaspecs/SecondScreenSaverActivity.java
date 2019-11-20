@@ -119,9 +119,9 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
             //startService(mServiceIntent2);
             //moveTaskToBack(true);
             DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-            if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+            /*if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
                 stopLockTask();
-            }
+            }*/
             finishAndRemoveTask();
             SharedPreferences.Editor editor = myPrefs.edit();
             editor.putString("SCREENSAVER", "1");
@@ -154,6 +154,7 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        //getWindow().addFlags(WindowManager.LayoutParams.TYPE_PHONE);
         WindowManager.LayoutParams params = getWindow().getAttributes();
         if(nowIsBetweenTwoHours(21,15 , 8, 45)){
             finishAndRemoveTask();
@@ -202,9 +203,9 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
                     case (MotionEvent.ACTION_OUTSIDE) :
                         DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
                         // First, confirm that this package is whitelisted to run in lock task mode.
-                        if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                        /*if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
                             stopLockTask();
-                        }
+                        }*/
                         finishAndRemoveTask();
                         //Log.d("DEBUG_TAG","Action was DOWN");
                         return true;
@@ -432,9 +433,9 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
 
         DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         // First, confirm that this package is whitelisted to run in lock task mode.
-        if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+        /*if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
             startLockTask();
-        }
+        }*/
 
         sensorMan.registerListener(this, accelerometer,
                 SensorManager.SENSOR_DELAY_UI);
@@ -464,9 +465,9 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
             if(mAccel > 3){
                 DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
                 // First, confirm that this package is whitelisted to run in lock task mode.
-                if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                /*if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
                     stopLockTask();
-                }
+                }*/
                 finishAndRemoveTask();
                 // do something
             }

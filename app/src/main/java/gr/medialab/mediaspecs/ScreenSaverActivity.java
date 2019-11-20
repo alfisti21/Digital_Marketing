@@ -126,6 +126,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
 
         super.onCreate(savedInstanceState);
 
+
         ctx2 = this;
         mSensorService = new SensorService(getCtx2());
         mServiceIntent = new Intent(getCtx2(), mSensorService.getClass());
@@ -160,6 +161,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        //getWindow().addFlags(WindowManager.LayoutParams.TYPE_PHONE);
         WindowManager.LayoutParams params = getWindow().getAttributes();
         if(nowIsBetweenTwoHours(21,15 , 8, 45)){
             //Log.e("EINAI METAKSI?","EINAI");
@@ -425,9 +427,9 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
                 //Log.e("On Completion", "On Completion is accessed");
                 DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
                 // First, confirm that this package is whitelisted to run in lock task mode.
-                if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                /*if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
                     stopLockTask();
-                }
+                }*/
 
                 start2();
                 //onDestroy();
