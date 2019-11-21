@@ -150,6 +150,8 @@ public class ScreenProtector extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Intent heartbeat = new Intent(getApplicationContext(), HeartBeat.class);
+        startService(heartbeat);
         DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         // First, confirm that this package is whitelisted to run in lock task mode.
         if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {

@@ -53,6 +53,7 @@ public class HeartBeat extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         super.onStartCommand(intent, flags, startId);
         //startForeground(1,new Notification());
         myPrefs = getSharedPreferences("prefID", Context.MODE_PRIVATE);
@@ -61,9 +62,7 @@ public class HeartBeat extends Service {
         editor.apply();
         final RequestQueue queue = Volley.newRequestQueue(this);
 
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
+
 
                 String url = "https://vdf.livedevices.gr/api/livedeviceheartbeat";
                 //Log.e("HEARTBEAT URL", url);
@@ -72,11 +71,13 @@ public class HeartBeat extends Service {
                         (Request.Method.HEAD, url, (String)null, new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {
+                                onDestroy();
                                 //Log.e("HEARTBEAT RESPONSE", response.toString());
                             }
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                onDestroy();
                                 //Log.e("SFALMA HEARTBEAT", error.toString());
                             }
                         }){
@@ -93,6 +94,7 @@ public class HeartBeat extends Service {
                     protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
 
                         if (response.data == null || response.data.length == 0) {
+                            onDestroy();
                             return Response.success(new JSONArray(), HttpHeaderParser.parseCacheHeaders(response));
                         } else {
                             return super.parseNetworkResponse(response);
@@ -104,9 +106,14 @@ public class HeartBeat extends Service {
                         DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 queue.add(jsonObjectRequest);
-            }
-        }, 0, 3*60*1000);//3 minutes
+
         return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        this.stopSelf();
+        super.onDestroy();
     }
 
 }

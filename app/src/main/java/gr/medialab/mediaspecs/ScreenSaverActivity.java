@@ -390,62 +390,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
             colorsLayout.addView(imageColor);
         }
 
-        video = findViewById(R.id.videoView);
-        if (to2.exists()) {
 
-        //Uri uri = Uri.parse(Environment.getExternalStorageDirectory() + "/" + "main1.mp4");
-
-        //Creating and starting the Media Controller for the video
-        MediaController mediaController = new MediaController(this);
-        mediaController.setAnchorView(video);
-        video.setMediaController(null);
-        video.setVideoURI(uri);
-        video.requestFocus();
-        video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                //mp.setLooping(true);
-
-                mp.setVolume(0, 0);
-                video.start();
-                Intent service3 = new Intent(getApplicationContext(), ApkVersionCheck.class);
-                startService(service3);
-                //Log.e("On Completion", "Video Playing");
-            }
-        });
-    }else{
-            Intent i = new Intent(getApplicationContext(), VideoDownload.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-            finish();
-        }
-
-        video.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                //Log.e("On Completion", "On Completion is accessed");
-                DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-                // First, confirm that this package is whitelisted to run in lock task mode.
-                /*if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
-                    stopLockTask();
-                }*/
-
-                start2();
-                //onDestroy();
-                //finishAndRemoveTask();
-                //mp.setVolume(0,0);
-                //video.resume();
-            }
-        });
-
-        video.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int i, int i1) {
-                finish();
-                return true;
-            }
-        });
 
     }
 
@@ -544,6 +489,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
     //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onResume() {
+        final VideoView video;
         /*String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
         if(checkTime("21:15:00", "08:45:00", currentTime)) {
             Intent i = new Intent(getApplicationContext(), ScreenProtector.class);
@@ -553,6 +499,8 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
             this.startActivity(i);
         }*/
         super.onResume();
+        Intent heartbeat = new Intent(getApplicationContext(), HeartBeat.class);
+        startService(heartbeat);
 
         DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         // First, confirm that this package is whitelisted to run in lock task mode.
@@ -562,6 +510,62 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
 
         sensorMan.registerListener(this, accelerometer,
                 SensorManager.SENSOR_DELAY_UI);
+        video = findViewById(R.id.videoView);
+        if (to2.exists()) {
+
+            //Uri uri = Uri.parse(Environment.getExternalStorageDirectory() + "/" + "main1.mp4");
+
+            //Creating and starting the Media Controller for the video
+            MediaController mediaController = new MediaController(this);
+            mediaController.setAnchorView(video);
+            video.setMediaController(null);
+            video.setVideoURI(uri);
+            video.requestFocus();
+            video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    //mp.setLooping(true);
+
+                    mp.setVolume(0, 0);
+                    video.start();
+                    Intent service3 = new Intent(getApplicationContext(), ApkVersionCheck.class);
+                    startService(service3);
+                    //Log.e("On Completion", "Video Playing");
+                }
+            });
+        }else{
+            Intent i = new Intent(getApplicationContext(), VideoDownload.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            finish();
+        }
+
+        video.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                //Log.e("On Completion", "On Completion is accessed");
+                DevicePolicyManager mDpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                // First, confirm that this package is whitelisted to run in lock task mode.
+                /*if (mDpm.isLockTaskPermitted(getApplicationContext().getPackageName())) {
+                    stopLockTask();
+                }*/
+
+                start2();
+                //onDestroy();
+                //finishAndRemoveTask();
+                //mp.setVolume(0,0);
+                //video.resume();
+            }
+        });
+
+        video.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int i, int i1) {
+                finish();
+                return true;
+            }
+        });
     }
 
     @Override
