@@ -111,7 +111,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
             i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             this.startActivity(i);
-            finish();
+            onDestroy();
         }
         sensorMan = (SensorManager)getSystemService(SENSOR_SERVICE);
         if (sensorMan != null) {
@@ -460,7 +460,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
 
     protected void start2()  {
         //Log.e("On Completion", "start is called");
-        Intent dialogIntent = new Intent(ScreenSaverActivity.this, SecondScreenSaverActivity.class);
+        Intent dialogIntent = new Intent(getApplicationContext(), SecondScreenSaverActivity.class);
         dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(dialogIntent);
     }
