@@ -60,6 +60,8 @@ public class ScreenProtector extends AppCompatActivity {
 
         String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
         if(!nowIsBetweenTwoHours(21,15 , 8, 45)) {
+            Intent service3 = new Intent(getApplicationContext(), ApkVersionCheck.class);
+            startService(service3);
             finishAndRemoveTask();
         }
 
