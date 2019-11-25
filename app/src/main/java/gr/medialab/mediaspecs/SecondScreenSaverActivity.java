@@ -157,7 +157,7 @@ public class SecondScreenSaverActivity extends AppCompatActivity implements Sens
         //getWindow().addFlags(WindowManager.LayoutParams.TYPE_PHONE);
         WindowManager.LayoutParams params = getWindow().getAttributes();
         if(nowIsBetweenTwoHours(21,15 , 8, 45)){
-            onDestroy();
+            finish();
             //Log.e("EINAI METAKSI?","EINAI");
             params.screenBrightness = 0.1f;
         }else{

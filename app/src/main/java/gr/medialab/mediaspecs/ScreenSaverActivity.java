@@ -111,7 +111,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
             i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             this.startActivity(i);
-            onDestroy();
+            finish();
         }
         sensorMan = (SensorManager)getSystemService(SENSOR_SERVICE);
         if (sensorMan != null) {
@@ -454,15 +454,13 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
 
     @Override
     protected void onDestroy() {
-        finishAndRemoveTask();
         super.onDestroy();
     }
 
     protected void start2()  {
         //Log.e("On Completion", "start is called");
-        Intent dialogIntent = new Intent(getApplicationContext(), SecondScreenSaverActivity.class);
-        dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(dialogIntent);
+        Intent secondscreen = new Intent(getApplicationContext(), SecondScreenSaverActivity.class);
+        startActivity(secondscreen);
     }
 
     private boolean isTablet() {
@@ -499,6 +497,14 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
             this.startActivity(i);
         }*/
         super.onResume();
+        if(nowIsBetweenTwoHours(21,15 , 8, 45)) {
+            Intent i2 = new Intent(getApplicationContext(), ScreenProtector.class);
+            i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i2.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            i2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            this.startActivity(i2);
+            finish();
+        }
         Intent heartbeat = new Intent(getApplicationContext(), HeartBeat.class);
         startService(heartbeat);
 
@@ -553,7 +559,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
 
                 start2();
                 //onDestroy();
-                //finishAndRemoveTask();
+                finish();
                 //mp.setVolume(0,0);
                 //video.resume();
             }
