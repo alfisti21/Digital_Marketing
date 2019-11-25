@@ -534,8 +534,6 @@ public class ScreenSaverActivity extends AppCompatActivity implements SensorEven
 
                     mp.setVolume(0, 0);
                     video.start();
-                    Intent service3 = new Intent(getApplicationContext(), ApkVersionCheck.class);
-                    startService(service3);
                     //Log.e("On Completion", "Video Playing");
                 }
             });
