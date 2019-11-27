@@ -66,7 +66,7 @@ public class VideoCheck extends Service {
                             @Override
                             public void onResponse(JSONArray response) {
                                 //Log.e("VIDEOCHECK RESPONSE", response.toString());
-                                onDestroy();
+                                stopSelf();
                             }
                         }, new Response.ErrorListener() {
                             @Override
@@ -99,7 +99,7 @@ public class VideoCheck extends Service {
                                 i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(i);
-                                onDestroy();
+                                stopSelf();
                             return Response.success(new JSONArray(), HttpHeaderParser.parseCacheHeaders(response));
                             }
                             return Response.success(new JSONArray(), HttpHeaderParser.parseCacheHeaders(response));
@@ -119,8 +119,8 @@ public class VideoCheck extends Service {
 
     @Override
     public void onDestroy() {
-        Log.e("VIDEOCHECK", "onDestroy");
-        this.stopSelf();
+        //Log.e("VIDEOCHECK", "onDestroy");
+        //this.stopSelf();
         super.onDestroy();
     }
 
